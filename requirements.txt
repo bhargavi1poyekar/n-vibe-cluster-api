@@ -1,0 +1,6 @@
+flask
+loguru
+pandas
+numpy
+joblib
+torch
