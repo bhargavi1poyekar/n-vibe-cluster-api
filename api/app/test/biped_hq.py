@@ -1,7 +1,7 @@
 import requests
 
 # The URL for the API endpoint (assuming the Flask app is running locally on port 5000)
-url = "http://127.0.0.1:5000/api/biped_hq"
+url = "http://34.247.213.126:3000/api/biped_hq"
 
 # Example data to send in the request
 # Replace this with the actual RSSI signals data you want to send

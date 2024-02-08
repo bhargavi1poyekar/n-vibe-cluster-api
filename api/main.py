@@ -19,7 +19,7 @@ class InterceptHandler(logging.Handler):
 logger.remove()  # Remove default handler
 logger.add(sys.stderr, level="INFO")  # Add terminal sink with INFO level
 logger.add(
-    "api/app/logs/api_{time}.log", rotation="50 MB", level="INFO"
+    "/app/logs/api_{time}.log", rotation="50 MB", level="INFO"
 )  # Add file sink with rotation
 
 # Replace Flask's default logger with Loguru's InterceptHandler
