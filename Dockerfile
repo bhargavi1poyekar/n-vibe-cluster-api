@@ -15,6 +15,8 @@ RUN poetry install --without dev --no-root && rm -rf $POETRY_CACHE_DIR
 COPY api ./api
 WORKDIR /api
 
+EXPOSE 3000
+
 RUN poetry install --without dev
 
 ENTRYPOINT ["poetry", "run", "python", "main.py"]
