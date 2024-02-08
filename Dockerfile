@@ -1,11 +1,20 @@
-FROM python:3.8-slim
-WORKDIR /app
-#RUN apt update && apt-get install -y netcat
-RUN pip install gunicorn Flask joblib pandas numpy==1.23.3 scipy scikit-learn==0.22.1 DateTime loguru
-#RUN pip --no-cache-dir install torch
-#RUN pip install torchvision
+FROM python:3.11-buster
 
-ADD app.py /app
-ADD /model /app/model
+RUN pip install poetry==1.4.2
 
-CMD ["gunicorn", "app:app", "-b", "0.0.0.0:5000"]
+ENV POETRY_NO_INTERACTION=1 \
+    POETRY_VIRTUALENVS_IN_PROJECT=1 \
+    POETRY_VIRTUALENVS_CREATE=1 \
+    POETRY_CACHE_DIR=/tmp/poetry_cache
+
+COPY pyproject.toml poetry.lock ./
+
+RUN poetry install --without dev --no-root && rm -rf $POETRY_CACHE_DIR
+
+
+COPY api ./api
+WORKDIR /api
+
+RUN poetry install --without dev
+
+ENTRYPOINT ["poetry", "run", "python", "main.py"]
