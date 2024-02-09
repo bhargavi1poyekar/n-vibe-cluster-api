@@ -8,3 +8,9 @@ class RSSISignals(BaseModel):
     @field_validator("signal")
     def check_rssi_signal(cls, v: List[Union[int, float]]):
         return [float(value) if isinstance(value, int) else value for value in v]
+
+
+class ClusterPrediction(BaseModel):
+    floor: int = 0
+    cluster: int
+    position: tuple[float, float]

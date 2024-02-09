@@ -1,20 +1,14 @@
 from werkzeug.exceptions import BadRequest
 
-from app.models.data_models import RSSISignals
+from app.models.data_models import RSSISignals, ClusterPrediction
 from app.utils.data_processing import aggregate_rssi_signals
 from app.utils.model import load_model
 from flask import Blueprint, request, jsonify
 from loguru import logger
 import numpy as np
-from pydantic import BaseModel, ValidationError
+from pydantic import ValidationError
 
 bp = Blueprint("api", __name__, url_prefix="/api")
-
-
-class ClusterPrediction(BaseModel):
-    floor: int = 0
-    cluster: int
-    position: tuple[float, float]
 
 
 def predict_hierarchical_coords(rss_data, models_dict):
@@ -30,7 +24,9 @@ def predict_hierarchical_coords(rss_data, models_dict):
 
 @bp.before_request
 def log_request_info():
-    logger.info(f"Request: {request.method} {request.url} - {request.remote_addr}")
+    logger.info(
+        f"Request: {request.method} {request.url} - {request.remote_addr} - Input data: {request.get_json()}"
+    )
 
 
 @bp.after_request
