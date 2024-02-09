@@ -62,5 +62,5 @@ def biped_hq():
     except BadRequest as e:
         return jsonify(error=str(e)), 400
 
-    except Exception:
-        return jsonify(error="An unexpected error occurred."), 500
+    except Exception as e:
+        return jsonify(error=f"An unexpected error occurred. {e}"), 500
