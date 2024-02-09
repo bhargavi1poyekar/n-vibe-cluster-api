@@ -6,7 +6,7 @@ from app.utils.model import load_model
 from flask import Blueprint, request, jsonify
 from loguru import logger
 import numpy as np
-from pydantic import BaseModel
+from pydantic import BaseModel, ValidationError
 
 bp = Blueprint("api", __name__, url_prefix="/api")
 
@@ -47,15 +47,20 @@ def biped_hq():
             raise BadRequest("Missing or invalid 'tab' in JSON payload.")
 
         data = [RSSISignals(signal=t) for t in data["tab"]]
+
         input_signal = aggregate_rssi_signals(data)
 
         model = load_model("biped_hq")
         prediction = predict_hierarchical_coords(input_signal.signal, model)
 
         return prediction.model_dump_json()
+
+    except ValidationError as e:
+        errors = e.errors()
+        return jsonify(errors=errors), 400
+
     except BadRequest as e:
-        # Handle bad request errors (e.g., missing or invalid data in request)
         return jsonify(error=str(e)), 400
+
     except Exception:
-        # Handle other unexpected errors
         return jsonify(error="An unexpected error occurred."), 500
