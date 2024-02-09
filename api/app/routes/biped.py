@@ -1,10 +1,9 @@
-import random
-from typing import Any, Dict, List, Tuple
+from werkzeug.exceptions import BadRequest
 
 from app.models.data_models import RSSISignals
 from app.utils.data_processing import aggregate_rssi_signals
 from app.utils.model import load_model
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify
 from loguru import logger
 import numpy as np
 from pydantic import BaseModel
@@ -26,7 +25,7 @@ def predict_hierarchical_coords(rss_data, models_dict):
 
     position_prediction = [p * 10e-8 for p in position_prediction]
 
-    return ClusterPrediction(cluster=cluster_prediction[0], position=position_prediction[0])
+    return ClusterPrediction(cluster=cluster_prediction[0] - 1, position=position_prediction[0])
 
 
 @bp.before_request
@@ -42,9 +41,21 @@ def log_response_info(response):
 
 @bp.route("/biped_hq", methods=["POST"])
 def biped_hq():
-    data = request.get_json()
-    data = [RSSISignals(signal=t) for t in data["tab"]]
-    input_signal = aggregate_rssi_signals(data)
-    model = load_model("biped_hq")
-    prediction = predict_hierarchical_coords(input_signal.signal, model)
-    return prediction.model_dump_json()
+    try:
+        data = request.get_json()
+        if not data or "tab" not in data:
+            raise BadRequest("Missing or invalid 'tab' in JSON payload.")
+
+        data = [RSSISignals(signal=t) for t in data["tab"]]
+        input_signal = aggregate_rssi_signals(data)
+
+        model = load_model("biped_hq")
+        prediction = predict_hierarchical_coords(input_signal.signal, model)
+
+        return prediction.model_dump_json()
+    except BadRequest as e:
+        # Handle bad request errors (e.g., missing or invalid data in request)
+        return jsonify(error=str(e)), 400
+    except Exception:
+        # Handle other unexpected errors
+        return jsonify(error="An unexpected error occurred."), 500
