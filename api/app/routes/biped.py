@@ -10,6 +10,15 @@ from pydantic import ValidationError
 
 bp = Blueprint("api", __name__, url_prefix="/api")
 
+import logging
+
+def change_order(data_to_send: dict):
+    new_data = {'tab': []}
+    for tab in data_to_send["tab"]:
+        new_tab = [tab[9], tab[8], tab[7], tab[4], tab[3], tab[1], tab[0], tab[2], tab[6], tab[5]]
+        new_data['tab'].append(new_tab)
+
+    return new_data
 
 def predict_hierarchical_coords(rss_data, models_dict):
 
@@ -42,11 +51,13 @@ def biped_hq():
         if not data or "tab" not in data:
             raise BadRequest("Missing or invalid 'tab' in JSON payload.")
 
+        data = change_order(data)
         data = [RSSISignals(signal=t) for t in data["tab"]]
 
         input_signal = aggregate_rssi_signals(data)
 
         model = load_model("biped_hq")
+
         prediction = predict_hierarchical_coords(input_signal.signal, model)
 
         return prediction.model_dump_json()
