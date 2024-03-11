@@ -1,4 +1,0 @@
-2024-02-15 12:09:38.313 | INFO     | app.routes.biped:log_request_info:30 - Request: POST http://127.0.0.1:3000/api/biped_hq - 127.0.0.1 - Input data: {'tab': [[-74, -72, -73, -82, -70, -59, -65, -60, -100, -90], [-73, -73, -73, -81, -72, -58, -63, -60, -100, -89], [-72, -72, -74, -79, -70, -64, -63, -61, -100, -86]]}
-2024-02-15 12:09:38.958 | INFO     | app.routes.biped:log_response_info:37 - Response: 200 - {"floor":0,"cluster":1,"position":[46.5419024,6.659867299999999]}
-2024-02-15 12:10:00.991 | INFO     | app.routes.biped:log_request_info:30 - Request: POST http://127.0.0.1:3000/api/biped_hq - 127.0.0.1 - Input data: {'tab': [[-65, -59, -60, -70, -82, -90, -100, -73, -72, -74], [-63, -58, -60, -72, -81, -89, -100, -73, -73, -73], [-63, -64, -61, -70, -79, -86, -100, -74, -72, -72]]}
-2024-02-15 12:10:00.995 | INFO     | app.routes.biped:log_response_info:37 - Response: 200 - {"floor":0,"cluster":3,"position":[46.5420647,6.6600728]}
