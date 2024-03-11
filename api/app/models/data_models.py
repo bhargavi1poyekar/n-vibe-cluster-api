@@ -3,7 +3,7 @@ from typing import Union, List
 
 
 class RSSISignals(BaseModel):
-    signal: conlist(confloat(ge=-100, le=0), min_length=10, max_length=10)
+    signal: conlist(confloat(ge=-100, le=0))
 
     @field_validator("signal")
     def check_rssi_signal(cls, v: List[Union[int, float]]):

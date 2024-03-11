@@ -2,9 +2,10 @@ import pickle
 from pathlib import Path
 import os
 import yaml
+from typing import Any
 
 
-def find_model(name: str) -> Path:
+def find_model(name: str) -> Any:
     cwd = os.getcwd()
     config_folder = "app/config"
     config_file = os.path.join(cwd, config_folder, f"{name}.yaml")
@@ -13,7 +14,7 @@ def find_model(name: str) -> Path:
     return config
 
 
-def load_model(name: str):
+def load_model(name: str) -> Any:
     cwd = os.getcwd()
     model_config = find_model(name)
     model_path = os.path.join(
@@ -21,9 +22,4 @@ def load_model(name: str):
     )
     with open(model_path, "rb") as file:
         model = pickle.load(file)
-        print(model)
     return model
-
-
-if __name__ == "__main__":
-    load_model("biped_hq")

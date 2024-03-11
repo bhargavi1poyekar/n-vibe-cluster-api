@@ -8,7 +8,7 @@ from loguru import logger
 import numpy as np
 from pydantic import ValidationError
 
-bp = Blueprint("biped", __name__, url_prefix="/biped")
+mairie_xx = Blueprint("mairie-xx", __name__, url_prefix="/mairie-xx")
 
 
 def predict_hierarchical_coords(rss_data, models_dict):
@@ -20,24 +20,24 @@ def predict_hierarchical_coords(rss_data, models_dict):
     position_prediction = [p * 10e-8 for p in position_prediction]
 
     return ClusterPrediction(
-        cluster=cluster_prediction[0] - 1, position=position_prediction[0]
+        floor=2, cluster=cluster_prediction[0], position=position_prediction[0]
     )
 
 
-@bp.before_request
+@mairie_xx.before_request
 def log_request_info():
     logger.info(
         f"Request: {request.method} {request.url} - {request.remote_addr} - Input data: {request.get_json()}"
     )
 
 
-@bp.after_request
+@mairie_xx.after_request
 def log_response_info(response):
     logger.info(f"Response: {response.status_code} - {response.get_data(as_text=True)}")
     return response
 
 
-@bp.route("/cluster", methods=["POST"])
+@mairie_xx.route("/cluster", methods=["POST"])
 def biped_hq():
     try:
         data = request.get_json()
@@ -47,7 +47,7 @@ def biped_hq():
         data = [RSSISignals(signal=t) for t in data["tab"]]
 
         input_signal = aggregate_rssi_signals(data)
-        model = load_model("biped_hq")
+        model = load_model("mairie_xx")
 
         prediction = predict_hierarchical_coords(input_signal.signal, model)
 

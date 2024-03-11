@@ -1,5 +1,6 @@
 from flask import Flask, request, after_this_request
 from app.routes.biped import bp as api_bp
+from app.routes.mairie_xx import mairie_xx as api_mairie
 from loguru import logger
 import sys
 import logging
@@ -47,10 +48,10 @@ def after_request_logging(response):
 def create_app():
     app = Flask(__name__)
     app.register_blueprint(api_bp)
+    app.register_blueprint(api_mairie)
     return app
 
 
-app = create_app()
-
 if __name__ == "__main__":
+    app = create_app()
     app.run(host="0.0.0.0", port=3000)
