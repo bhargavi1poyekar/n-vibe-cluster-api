@@ -4,9 +4,9 @@ from app.utils.utils import time_and_log
 
 @time_and_log
 def main():
-    # The URL for the API endpoint (assuming the Flask app is running locally on port 5000)
-    # url = "http://34.247.213.126:3000/mairie-xx/cluster"
-    url = "http://127.0.0.1:3000/mairie-xx/cluster"
+    # The URL for the API endpoint (assuming the Flask app is running locally on port 3000)
+    url = "http://34.247.213.126:3000/mairie-xx/cluster"
+    # url = "http://127.0.0.1:3000/mairie-xx/cluster"
 
     # Example data to send in the request
     # Replace this with the actual RSSI signals data you want to send
@@ -58,24 +58,6 @@ def main():
             ],
         ]
     }
-
-    def change_order(data_to_send: dict):
-        new_data = {"tab": []}
-        for tab in data_to_send["tab"]:
-            new_tab = [
-                tab[9],
-                tab[8],
-                tab[7],
-                tab[4],
-                tab[3],
-                tab[1],
-                tab[0],
-                tab[2],
-                tab[6],
-                tab[5],
-            ]
-            new_data["tab"].append(new_tab)
-        return new_data
 
     # Make the POST request to the biped_hq endpoint
     response = requests.post(url, json=data_to_send)

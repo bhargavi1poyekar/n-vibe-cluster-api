@@ -40,13 +40,12 @@ def main():
     # Make the POST request to the biped_hq endpoint
     response = requests.post(url, json=change_order(data_to_send))
 
-    # # Check if the request was successful
-    # if response.status_code == 200:
-    #     print("Success:", response.json())
-    # else:
-    #     print("Error:", response.status_code, response.text)
+    # Check if the request was successful
+    if response.status_code == 200:
+        print("Success:", response.json())
+    else:
+        print("Error:", response.status_code, response.text)
 
 
 if __name__ == "__main__":
-    for i in range(100):
-        main()
+    main()
