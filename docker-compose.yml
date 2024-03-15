@@ -1,5 +1,8 @@
 version: "3.3"
 
+volumes:
+  - ./weights:/app/models/weights
+
 services:
   web:
     image: n-vibe-cluster-api:latest
